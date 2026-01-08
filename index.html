@@ -1,575 +1,581 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR" class="overflow-y-scroll">
+
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Link Rápido do WhatsApp — Conversor</title>
-  <meta name="description" content="Converta número de telefone em link direto do WhatsApp. Visual moderno, chamativo e fofo. Tudo em um arquivo (HTML+CSS+JS)." />
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;700;800&family=Nunito:wght@400;600&display=swap" rel="stylesheet">
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            primary: '#7c3aed',
-            secondary: '#06b6d4',
-            accent: '#fbc2eb',
-            background: '#f0f9ff',
-            card: '#ffffff',
-            text: '#1c1c1c',
-            muted: '#6b7280',
-            warn: '#ef4444',
-            success: '#10b981',
-          },
-          borderRadius: {
-            'xl': '20px',
-            '2xl': '24px',
-          }
+    <base target="_self">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Link Rápido do WhatsApp - Gerador Instantâneo</title>
+    <meta name="description"
+        content="Converta números de telefone em links do WhatsApp automaticamente. Interface limpa e profissional para criar links de conversa rapidamente.">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="icon" type="image/png" href="assets/img/phone.png" />
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" as="style">
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        .font-inter {
+            font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
         }
-      }
-    }
-  </script>
-  <style>
-    :root{
-      --bg1:#fbc2eb;      /* rosa lavanda */
-      --bg2:#a6c1ee;      /* azul clarinho */
-      --card:#ffffff;
-      --ink:#1c1c1c;
-      --muted:#6b7280;
-      --accent:#7c3aed;   /* roxo vivo, bom contraste */
-      --accent-2:#06b6d4; /* ciano fofinho */
-      --ring:#c4b5fd;     /* foco */
-      --warn:#ef4444;     /* erro */
-      --success:#10b981;  /* sucesso */
-      --radius:20px;
-    }
-    
-    *{box-sizing:border-box}
-    html,body{height:100%}
-    body{
-      margin:0; 
-      color:var(--ink);
-      font-family: Nunito, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans";
-      background: linear-gradient(135deg, var(--bg1) 0%, var(--bg2) 100%) fixed;
-      background-attachment: fixed;
-    }
-    
-    /* Orbes decorativos */
-    .blob{
-      position:fixed; 
-      border-radius:50%; 
-      filter: blur(60px); 
-      opacity:.4; 
-      pointer-events:none; 
-      z-index:0
-    }
-    .b1{
-      width:380px;
-      height:380px; 
-      left:-80px; 
-      top:-80px; 
-      background:#ffedd5
-    }
-    .b2{
-      width:460px;
-      height:460px; 
-      right:-100px; 
-      top:10vh; 
-      background:#dbeafe
-    }
-    .b3{
-      width:320px;
-      height:320px; 
-      left:10vw; 
-      bottom:-120px; 
-      background:#fde68a
-    }
-    
-    .wrap{
-      min-height:100%; 
-      display:grid; 
-      place-items:center; 
-      padding:32px 16px; 
-      position:relative; 
-      z-index:1
-    }
-    
-    .shell{
-      width:min(980px, 96vw)
-    }
-    
-    header.hero{
-      text-align:center; 
-      margin-bottom:18px; 
-    }
-    
-    .brand{
-      font-family: Poppins, Nunito, sans-serif; 
-      font-weight:800; 
-      letter-spacing:.4px;
-      font-size: clamp(28px, 6vw, 54px);
-      line-height:1.05; 
-      color:#111827; 
-      text-shadow: 0 2px 12px rgba(0,0,0,.08);
-    }
-    
-    .tagline{
-      font-size:clamp(14px, 2.6vw, 18px); 
-      color:#111827b3; 
-      margin-top:8px
-    }
-    
-    .card{
-      background: var(--card);
-      border-radius: var(--radius);
-      box-shadow: 0 12px 30px rgba(0,0,0,.12), 0 2px 0 rgba(255,255,255,.9) inset;
-      padding: clamp(18px, 4vw, 28px);
-      position:relative;
-    }
-    
-    /* faixa superior colorida */
-    .card::before{
-      content:""; 
-      position:absolute; 
-      inset:0 0 auto 0; 
-      height:10px; 
-      border-radius: var(--radius) var(--radius) 0 0;        
-      background: linear-gradient(90deg, var(--accent), var(--accent-2)); 
-      pointer-events:none;
-    }
-    
-    .grid{ 
-      display:grid; 
-      gap:16px; 
-      grid-template-columns:1fr; 
-      align-items:start; 
-    }
-    
-    @media (min-width:900px){ 
-      .grid{ 
-        grid-template-columns: 1.1fr .9fr; 
-        gap:22px; 
-      } 
-    }
-    
-    .field{ 
-      display:flex; 
-      flex-direction:column; 
-      gap:10px; 
-    }
-    
-    label{
-      font-weight:700; 
-      font-family:Poppins, Nunito, sans-serif; 
-      color:#111827; 
-    }
-    
-    .input{ 
-      width:100%; 
-      font:600 18px/1.2 Poppins, Nunito, sans-serif; 
-      color:#111; 
-      padding:16px;
-      border-radius:16px; 
-      border:2px solid #e5e7eb; 
-      background:#fff; 
-      box-shadow: 0 2px 0 rgba(0,0,0,.03);
-      outline:none; 
-      transition:.15s ease; 
-    }
-    
-    .input:focus{ 
-      border-color:var(--ring); 
-      box-shadow: 0 0 0 6px color-mix(in srgb, var(--ring) 28%, transparent); 
-    }
-    
-    .row{ 
-      display:grid; 
-      grid-template-columns: 140px 1fr; 
-      gap:12px; 
-    }
-    
-    @media (max-width:520px){ 
-      .row{ 
-        grid-template-columns: 1fr; 
-      } 
-    }
-    
-    textarea.input{ 
-      min-height:96px; 
-      resize:vertical; 
-    }
-    
-    .hint{ 
-      font-size:13px; 
-      color:var(--muted); 
-    }
-    
-    .actions{ 
-      display:flex; 
-      flex-wrap:wrap; 
-      gap:10px; 
-      align-items:center; 
-    }
-    
-    .btn{
-      --bg: var(--accent);
-      display:inline-flex; 
-      align-items:center; 
-      justify-content:center; 
-      gap:10px;
-      padding:16px 20px; 
-      border-radius:14px; 
-      border:none; 
-      cursor:pointer;
-      font:800 16px/1 Poppins, Nunito, sans-serif; 
-      color:#fff;
-      background: linear-gradient(135deg, color-mix(in srgb, var(--bg) 88%, black 0%), color-mix(in srgb, var(--bg) 60%, #fff 40%));
-      box-shadow: 0 10px 20px rgba(0,0,0,.15);
-      transition: transform .06s ease, filter .2s ease, box-shadow .2s ease;
-    }
-    
-    .btn:hover{ 
-      filter: brightness(1.05) saturate(1.05); 
-    }
-    
-    .btn:active{ 
-      transform: translateY(1px); 
-      box-shadow: 0 6px 12px rgba(0,0,0,.25); 
-    }
-    
-    .btn.secondary{ 
-      --bg: var(--accent-2); 
-    }
-    
-    .btn.ghost{ 
-      color:#111827; 
-      background:#f3f4f6; 
-      box-shadow:none; 
-      border:2px dashed #e5e7eb; 
-    }
-    
-    .btn[disabled]{ 
-      opacity:.6; 
-      cursor:not-allowed; 
-    }
-    
-    .panel{ 
-      background: #fafafa; 
-      border:2px dashed #e5e7eb; 
-      border-radius:16px; 
-      padding:14px; 
-    }
-    
-    .linkbox{ 
-      font:700 14px/1.3 Nunito, system-ui; 
-      word-break:break-all; 
-    }
-    
-    .result{ 
-      display:grid; 
-      grid-template-columns:1fr auto; 
-      gap:10px; 
-      align-items:center; 
-    }
-    
-    .badge{ 
-      display:inline-flex; 
-      align-items:center; 
-      gap:8px; 
-      font:800 12px/1 Poppins, Nunito; 
-      color:#065f46; 
-      background:#ecfdf5; 
-      border:1px solid #a7f3d0; 
-      padding:8px 10px; 
-      border-radius:999px; 
-    }
-    
-    .error{ 
-      color:var(--warn); 
-      font-weight:800; 
-      font-size:14px; 
-      display:none; 
-    }
-    
-    .show{ 
-      display:block; 
-    }
-    
-    footer.note{ 
-      text-align:center; 
-      color:#111827CC; 
-      margin-top:18px; 
-      font-size:13px; 
-    }
-    
-    /* Ícones SVG personalizados */
-    .icon {
-      width: 24px;
-      height: 24px;
-      display: inline-block;
-    }
-    
-    .icon-whatsapp {
-      fill: #25D366;
-    }
-    
-    .icon-copy {
-      fill: #111827;
-    }
-    
-    .icon-share {
-      fill: #111827;
-    }
-    
-    .icon-check {
-      fill: var(--success);
-    }
-    
-    .icon-reset {
-      fill: #111827;
-    }
-  </style>
+
+        /* Evita scroll horizontal chato */
+        html {
+  scroll-behavior: smooth;
+}
+
+* {
+    -webkit-overflow-scrolling: touch;
+}
+.fa-whatsapp,
+.fa-bars,
+.fa-comment,
+.fa-bolt,
+.fa-shield-alt,
+.fa-mobile-alt,
+.fa-heart,
+.fa-copy,
+.fa-share-alt,
+.fa-link {
+    width: 1em; 
+    text-align: center;
+}
+
+section[id] {
+  scroll-margin-top: 96px; /* ajusta conforme a altura do header */
+}
+
+
+        /* Fade suave no topo e no final das sections */
+        
+
+    </style>
 </head>
-<body>
-  <!-- blobs de fundo -->
-  <div class="blob b1"></div>
-  <div class="blob b2"></div>
-  <div class="blob b3"></div>
 
-  <div class="wrap">
-    <div class="shell">
-      <header class="hero" role="banner" aria-labelledby="title">
-        <div id="title" class="brand flex items-center justify-center gap-3">
-          <svg class="icon icon-whatsapp" viewBox="0 0 24 24" width="48" height="48">
-            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
-          </svg>
-          Link do WhatsApp, na hora
-        </div>
-        <div class="tagline">Converta um número de telefone para link de WhatsApp em Segundos!</div>
-      </header>
-
-      <main class="card" role="main" aria-label="Conversor">
-        <div class="grid">
-          <section>
-            <div class="field">
-              <label for="ddi">DDI (código do país)</label>
-              <div class="row">
-                <input id="ddi" class="input" inputmode="numeric" autocomplete="tel-country-code" placeholder="55" value="55" aria-describedby="ddi-hint" />
-                <input id="numero" class="input" inputmode="numeric" autocomplete="tel-national" placeholder="Número com DDD (só dígitos)" aria-describedby="numero-hint" />
-              </div>
-              <div id="ddi-hint" class="hint">Ex.: Brasil 55 • Portugal 351 • EUA 1 — sem "+" e sem "00".</div>
-              <div id="numero-hint" class="hint">Dica: remova zeros à esquerda. Ex.: 015 → 15.</div>
-              <div id="erro" class="error"></div>
-            </div>
-
-            <div class="field" style="margin-top:14px">
-              <label for="mensagem">Mensagem (opcional)</label>
-              <textarea id="mensagem" class="input" placeholder="Olá! Gostaria de informações sobre..."></textarea>
-              <div class="actions">
-                <button id="gerar" class="btn" type="button">
-                  <svg class="icon icon-whatsapp" viewBox="0 0 24 24" width="20" height="20">
-                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
-                  </svg>
-                  Gerar link
-                </button>
-                <button id="limpar" class="btn ghost" type="button">
-                  <svg class="icon icon-reset" viewBox="0 0 24 24" width="20" height="20">
-                    <path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/>
-                  </svg>
-                  Limpar
-                </button>
-              </div>
-            </div>
-          </section>
-
-          <aside aria-label="Resultado">
-            <div class="panel">
-              <div class="badge" id="statusBadge" hidden>
-                <svg class="icon icon-check" viewBox="0 0 24 24" width="16" height="16">
-                  <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
-                </svg>
-                Pronto para usar
-              </div>
-              <div class="field" style="margin-top:8px">
-                <label for="link">Seu link</label>
-                <div class="result">
-                  <input id="link" class="input linkbox" readonly value="" />
-                  <button id="copiar" class="btn secondary" type="button" title="Copiar">
-                    <svg class="icon icon-copy" viewBox="0 0 24 24" width="20" height="20">
-                      <path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/>
-                    </svg>
-                    Copiar
-                  </button>
+<body class="min-h-screen bg-gray-50 font-inter">
+    <!-- HEADER -->
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+        <nav class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+            <div class="flex items-center justify-between">
+                <!-- Logo -->
+                <div class="flex items-center space-x-2">
+                    <i class="fab fa-whatsapp text-green-500 text-xl"></i>
+                    <span class="text-gray-800 font-semibold text-lg">LinkWhatsApp</span>
                 </div>
-                <div class="actions" style="margin-top:10px">
-                  <a id="abrir" class="btn" target="_blank" rel="noopener" href="#" role="button">
-                    <svg class="icon icon-whatsapp" viewBox="0 0 24 24" width="20" height="20">
-                      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
-                    </svg>
-                    Ir para WhatsApp
-                  </a>
-                  <button id="compartilhar" class="btn ghost" type="button">
-                    <svg class="icon icon-share" viewBox="0 0 24 24" width="20" height="20">
-                      <path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"/>
-                    </svg>
-                    Compartilhar
-                  </button>
+
+                <!-- Botão mobile -->
+                <button id="navToggle"
+                    class="md:hidden inline-flex items-center justify-center p-2 rounded-md text-gray-600 hover:text-gray-900 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-green-500"
+                    aria-label="Abrir menu">
+                    <i class="fas fa-bars text-xl"></i>
+                </button>
+
+                <!-- Menu desktop -->
+                <div class="hidden md:flex items-center space-x-6">
+                    <a href="#recursos" class="text-gray-600 hover:text-gray-900 transition-colors">Recursos</a>
+                    <a href="#sobre" class="text-gray-600 hover:text-gray-900 transition-colors">Sobre</a>
+                    <a href="#contato" class="text-gray-600 hover:text-gray-900 transition-colors">Contato</a>
                 </div>
-              </div>
             </div>
-            <footer class="note">Dica: salve o link pra reutilizar. Funciona no celular e no desktop.</footer>
-          </aside>
+
+            <!-- Menu mobile -->
+            <div id="mobileMenu" class="hidden md:hidden mt-3 border-t border-gray-100 pt-3 space-y-2">
+                <a href="#recursos" class="block text-gray-700 hover:text-gray-900 py-1">Recursos</a>
+                <a href="#sobre" class="block text-gray-700 hover:text-gray-900 py-1">Sobre</a>
+                <a href="#contato" class="block text-gray-700 hover:text-gray-900 py-1">Contato</a>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <!-- HERO / FORM -->
+        <section class="py-10 sm:py-14 lg:py-20 px-4 sm:px-6 lg:px-8 flex justify-center">
+            <div
+                class="w-full max-w-md sm:max-w-lg md:max-w-xl lg:max-w-2xl bg-white rounded-xl shadow-sm border border-gray-100 p-6 sm:p-8">
+                <!-- Header -->
+                <div class="flex items-center space-x-3 mb-6">
+                    <div class="w-10 h-10 bg-green-50 rounded-full flex items-center justify-center">
+                        <i class="fas fa-comment text-green-500 text-lg"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-gray-800 font-semibold text-lg sm:text-xl">Link Rápido do WhatsApp</h1>
+                    </div>
+                </div>
+
+                <!-- Title Section -->
+                <div class="mb-8">
+                    <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-3 leading-tight">
+                        Link do WhatsApp, na hora
+                    </h2>
+                    <p class="text-gray-600 leading-relaxed text-sm sm:text-base">
+                        Converta um número de telefone para link de WhatsApp em segundos!
+                    </p>
+                </div>
+
+                <!-- Form -->
+                <form id="whatsappForm" class="space-y-6">
+                    <!-- DDI Field -->
+                    <div>
+                        <label for="ddi" class="block text-sm font-medium text-gray-700 mb-2">
+                            DDI (código do país)
+                        </label>
+                        <div class="relative">
+                            <input type="text" id="ddi" placeholder="Ex: 55"
+                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-colors text-sm sm:text-base">
+                            <p class="text-xs text-gray-500 mt-1">
+                                Código internacional do país (ex: 55 para Brasil)
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Phone Number Field -->
+                    <div>
+                        <label for="phone" class="block text-sm font-medium text-gray-700 mb-2">
+                            Número do WhatsApp
+                        </label>
+                        <div class="relative">
+                            <input type="tel" id="phone" placeholder="Ex: 11999999999"
+                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-colors text-sm sm:text-base">
+                            <p class="text-xs text-gray-500 mt-1">
+                                Apenas números, sem espaços ou caracteres especiais
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Message Field -->
+                    <div>
+                        <label for="message" class="block text-sm font-medium text-gray-700 mb-2">
+                            Mensagem (opcional)
+                        </label>
+                        <div class="relative">
+                            <textarea id="message" rows="3" placeholder="Digite sua mensagem pré-definida..."
+                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-colors resize-none text-sm sm:text-base"></textarea>
+                            <p class="text-xs text-gray-500 mt-1">
+                                Mensagem que será exibida ao abrir o WhatsApp
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="flex flex-col sm:flex-row gap-3 pt-2">
+                        <button type="submit"
+                            class="w-full sm:flex-1 bg-green-500 hover:bg-green-600 text-white font-medium py-3 px-6 rounded-lg transition-colors focus:ring-2 focus:ring-green-500 focus:ring-offset-2 text-sm sm:text-base">
+                            Gerar link
+                        </button>
+                        <button type="button" id="clearBtn"
+                            class="w-full sm:flex-1 border border-gray-300 hover:bg-gray-50 text-gray-700 font-medium py-3 px-6 rounded-lg transition-colors focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 text-sm sm:text-base">
+                            Limpar
+                        </button>
+                    </div>
+                </form>
+
+                <!-- Generated Link Section -->
+                <div id="linkSection" class="mt-8 p-5 sm:p-6 bg-gray-50 rounded-lg border border-gray-200 hidden">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-4">Seu link</h3>
+
+                    <!-- Link Display -->
+                    <div class="mb-4">
+                        <div
+                            class="flex items-center space-x-3 bg-white border border-gray-300 rounded-lg px-3 sm:px-4 py-3">
+                            <i class="fas fa-link text-gray-400"></i>
+                            <input type="text" id="generatedLink" readonly
+                                class="flex-1 bg-transparent border-none focus:outline-none text-gray-600 text-xs sm:text-sm">
+                        </div>
+                    </div>
+
+                    <!-- Link Action Buttons -->
+                    <div class="flex flex-col md:flex-row gap-3">
+                        <button id="copyBtn"
+                            class="w-full md:flex-1 bg-gray-600 hover:bg-gray-700 text-white font-medium py-2.5 px-4 rounded-lg transition-colors focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 text-sm">
+                            <i class="far fa-copy mr-2"></i>
+                            Copiar
+                        </button>
+                        <button id="whatsappBtn"
+                            class="w-full md:flex-1 bg-green-500 hover:bg-green-600 text-white font-medium py-2.5 px-4 rounded-lg transition-colors focus:ring-2 focus:ring-green-500 focus:ring-offset-2 text-sm">
+                            <i class="fab fa-whatsapp mr-2"></i>
+                            Ir para WhatsApp
+                        </button>
+                        <button id="shareBtn"
+                            class="w-full md:flex-1 border border-gray-300 hover:bg-gray-50 text-gray-700 font-medium py-2.5 px-4 rounded-lg transition-colors focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 text-sm">
+                            <i class="fas fa-share-alt mr-2"></i>
+                            Compartilhar
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Recursos Section -->
+        <section id="recursos" class=" py-12 sm:py-16 lg:py-20 bg-white">
+            <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-10 sm:mb-12">
+                    <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-3">Recursos Incríveis</h2>
+                    <p class="text-gray-600 text-base sm:text-lg max-w-2xl mx-auto">
+                        Descubra todas as funcionalidades que tornam nossa ferramenta essencial para seu dia a dia
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
+                    <div class="text-center p-6">
+                        <div class="w-16 h-16 bg-green-50 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <i class="fas fa-bolt text-green-500 text-2xl"></i>
+                        </div>
+                        <h3 class="text-lg sm:text-xl font-semibold text-gray-900 mb-3">Rápido e Eficiente</h3>
+                        <p class="text-gray-600 text-sm sm:text-base">
+                            Gere links do WhatsApp em segundos, sem complicações. Interface intuitiva que qualquer
+                            pessoa pode usar.
+                        </p>
+                    </div>
+
+                    <div class="text-center p-6">
+                        <div class="w-16 h-16 bg-blue-50 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <i class="fas fa-shield-alt text-blue-500 text-2xl"></i>
+                        </div>
+                        <h3 class="text-lg sm:text-xl font-semibold text-gray-900 mb-3">100% Seguro</h3>
+                        <p class="text-gray-600 text-sm sm:text-base">
+                            Seus dados nunca são armazenados. Processamento totalmente local no seu navegador para
+                            máxima privacidade.
+                        </p>
+                    </div>
+
+                    <div class="text-center p-6">
+                        <div class="w-16 h-16 bg-purple-50 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <i class="fas fa-mobile-alt text-purple-500 text-2xl"></i>
+                        </div>
+                        <h3 class="text-lg sm:text-xl font-semibold text-gray-900 mb-3">Totalmente Responsivo</h3>
+                        <p class="text-gray-600 text-sm sm:text-base">
+                            Funciona perfeitamente em qualquer dispositivo - desktop, tablet ou smartphone. Acesse de
+                            qualquer lugar.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Sobre Section -->
+        <section id="sobre" class=" py-12 sm:py-16 lg:py-20 bg-gray-50">
+            <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="max-w-4xl mx-auto">
+                    <div class="text-center mb-10 sm:mb-12">
+                        <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-3">Sobre o LinkWhatsApp</h2>
+                        <p class="text-gray-600 text-base sm:text-lg">
+                            Conheça nossa missão e por que criamos esta ferramenta
+                        </p>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-12 items-center">
+                        <div class="order-1 lg:order-none">
+                            <img src="https://picsum.photos/400/300?random=10" alt="Equipe trabalhando em projeto"
+                                class="w-full rounded-xl shadow-md object-cover" loading="lazy">
+                        </div>
+                        <div>
+                            <h3 class="text-xl sm:text-2xl font-semibold text-gray-900 mb-4">Nossa Missão</h3>
+                            <p class="text-gray-600 mb-4 text-sm sm:text-base">
+                                Criamos o LinkWhatsApp para simplificar a vida de profissionais, empresas e pessoas
+                                que precisam compartilhar contatos do WhatsApp de forma rápida e profissional.
+                            </p>
+                            <p class="text-gray-600 mb-6 text-sm sm:text-base">
+                                Acreditamos que a tecnologia deve ser acessível e útil para todos, por isso
+                                desenvolvemos
+                                uma ferramenta gratuita, sem anúncios e focada na experiência do usuário.
+                            </p>
+                            <div class="flex items-center space-x-4">
+                                <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
+                                    <i class="fas fa-heart text-green-500"></i>
+                                </div>
+                                <div>
+                                    <p class="text-gray-800 font-medium text-sm sm:text-base">
+                                        Feito com ❤️ para facilitar seu dia a dia
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contato Section -->
+        <section id="contato" class=" py-12 sm:py-16 lg:py-20 bg-gray-50">
+            <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="max-w-4xl mx-auto text-center">
+                    <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-3">Entre em Contato</h2>
+                    <p class="text-gray-600 text-base sm:text-lg mb-8">
+                        Tem dúvidas, sugestões ou precisa de ajuda? Estamos aqui para te atender!
+                    </p>
+
+                    <div class="bg-green-50 border border-green-200 rounded-xl p-6 sm:p-8 max-w-md mx-auto">
+                        <div class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                            <i class="fab fa-whatsapp text-green-500 text-3xl"></i>
+                        </div>
+                        <h3 class="text-lg sm:text-xl font-semibold text-gray-900 mb-4">Suporte via WhatsApp</h3>
+                        <p class="text-gray-600 mb-6 text-sm sm:text-base">
+                            Nosso canal preferencial para um atendimento rápido e personalizado
+                        </p>
+                        <a href="https://wa.me/5538988064942" target="_blank"
+                            class="inline-flex items-center justify-center bg-green-500 hover:bg-green-600 text-white font-semibold py-3 px-8 rounded-lg transition-colors focus:ring-2 focus:ring-green-500 focus:ring-offset-2 text-sm sm:text-base">
+                            <i class="fab fa-whatsapp mr-3 text-lg"></i>
+                            Chamar no WhatsApp
+                        </a>
+                        <p class="text-sm text-gray-500 mt-4">(38) 98806-4942</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-gray-900 text-white">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-12">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div class="md:col-span-2">
+                    <div class="flex items-center space-x-2 mb-4">
+                        <i class="fab fa-whatsapp text-green-400 text-xl"></i>
+                        <span class="text-white font-semibold text-lg">LinkWhatsApp</span>
+                    </div>
+                    <p class="text-gray-400 mb-4 text-sm sm:text-base">
+                        Ferramenta gratuita e poderosa para criar links do WhatsApp instantaneamente.
+                        Simplifique sua comunicação digital.
+                    </p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                            <i class="fab fa-facebook text-xl"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                            <i class="fab fa-twitter text-xl"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                            <i class="fab fa-linkedin text-xl"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Legal</h4>
+                    <ul class="space-y-2 text-sm sm:text-base">
+                        <li><a href="#privacidade" class="text-gray-400 hover:text-white transition-colors">Política de
+                                Privacidade</a></li>
+                        <li><a href="#termos" class="text-gray-400 hover:text-white transition-colors">Termos de Uso</a>
+                        </li>
+                        <li><a href="#cookies" class="text-gray-400 hover:text-white transition-colors">Cookies</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Suporte</h4>
+                    <ul class="space-y-2 text-sm sm:text-base">
+                        <li><a href="https://wa.me/5538988064942" target="_blank"
+                                class="text-gray-400 hover:text-white transition-colors">WhatsApp</a></li>
+                        <li><a href="#faq" class="text-gray-400 hover:text-white transition-colors">FAQ</a></li>
+                        <li><a href="#tutoriais" class="text-gray-400 hover:text-white transition-colors">Tutoriais</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="border-t border-gray-800 mt-8 pt-6 text-center">
+                <p class="text-gray-400 text-xs sm:text-sm">
+                    © 2024 LinkWhatsApp. Todos os direitos reservados.
+                </p>
+            </div>
         </div>
-      </main>
+    </footer>
+
+    <!-- MODAIS (mantidos, só ajustes leves de padding para mobile) -->
+    <div id="privacidade" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 hidden z-50">
+        <div class="bg-white rounded-xl max-w-2xl w-full max-h-[80vh] overflow-y-auto">
+            <div class="p-5 sm:p-6">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-xl sm:text-2xl font-bold text-gray-900">Política de Privacidade</h3>
+                    <button onclick="closeModal('privacidade')" class="text-gray-500 hover:text-gray-700">
+                        <i class="fas fa-times text-xl"></i>
+                    </button>
+                </div>
+                <div class="space-y-4 text-sm sm:text-base text-gray-600">
+                    <p>No LinkWhatsApp, levamos sua privacidade muito a sério. Esta política
+                        explica como coletamos, usamos e protegemos suas informações.</p>
+
+                    <div>
+                        <h4 class="text-lg font-semibold text-gray-900 mb-1">Coleta de Dados</h4>
+                        <p>Não coletamos, armazenamos ou processamos nenhum dado pessoal. Todo o
+                            processamento é feito localmente no seu navegador.</p>
+                    </div>
+
+                    <div>
+                        <h4 class="text-lg font-semibold text-gray-900 mb-1">Informações de Uso</h4>
+                        <p>Utilizamos apenas dados anônimos de analytics para melhorar nossa
+                            ferramenta. Nenhuma informação pessoal é compartilhada.</p>
+                    </div>
+
+                    <div>
+                        <h4 class="text-lg font-semibold text-gray-900 mb-1">Contato</h4>
+                        <p>Dúvidas sobre privacidade? Entre em contato via WhatsApp:
+                            <a href="https://wa.me/5538988064942" class="text-green-500 hover:text-green-600">(38)
+                                98806-4942</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-  </div>
 
-  <script>
-    (function(){
-      const q = (id) => document.getElementById(id);
-      const ddi = q('ddi');
-      const numero = q('numero');
-      const mensagem = q('mensagem');
-      const gerar = q('gerar');
-      const limpar = q('limpar');
-      const erro = q('erro');
-      const link = q('link');
-      const copiar = q('copiar');
-      const abrir = q('abrir');
-      const compartilhar = q('compartilhar');
-      const statusBadge = q('statusBadge');
+    <div id="termos" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 hidden z-50">
+        <div class="bg-white rounded-xl max-w-2xl w-full max-h-[80vh] overflow-y-auto">
+            <div class="p-5 sm:p-6">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-xl sm:text-2xl font-bold text-gray-900">Termos de Uso</h3>
+                    <button onclick="closeModal('termos')" class="text-gray-500 hover:text-gray-700">
+                        <i class="fas fa-times text-xl"></i>
+                    </button>
+                </div>
+                <div class="space-y-4 text-sm sm:text-base text-gray-600">
+                    <p>Ao usar o LinkWhatsApp, você concorda com estes termos de uso. Leia
+                        com atenção.</p>
 
-      function onlyDigits(v){ return (v || '').split('').filter(c => c >= '0' && c <= '9').join(''); }
-      function sanitizeDDI(v){
-        v = (v || '').trim();
-        if(v.startsWith('+')) v = v.slice(1);
-        if(v.startsWith('00')) v = v.slice(2);
-        return onlyDigits(v);
-      }
-      function sanitizeLocal(v){
-        v = onlyDigits(v);
-        while(v.startsWith('0')) v = v.slice(1);
-        return v;
-      }
+                    <div>
+                        <h4 class="text-lg font-semibold text-gray-900 mb-1">Uso Permitido</h4>
+                        <p>Você pode usar nossa ferramenta gratuitamente para fins pessoais e
+                            comerciais legítimos.</p>
+                    </div>
 
-      function makeWaLink(){
-        const rawDDI = sanitizeDDI(ddi.value);
-        const rawLocal = sanitizeLocal(numero.value);
-        let err = '';
-        if(!rawDDI) err = 'Informe o DDI (ex.: 55 para Brasil).';
-        if(!rawLocal) err = err || 'Informe o número com DDD (apenas dígitos).';
-        if(rawLocal && rawLocal.length < 8) err = 'Número curto. Confira DDD e o restante.';
-        if(rawDDI && (rawDDI.length < 1 || rawDDI.length > 3)) err = 'DDI deve ter 1 a 3 dígitos.';
+                    <div>
+                        <h4 class="text-lg font-semibold text-gray-900 mb-1">Restrições</h4>
+                        <p>Não é permitido usar a ferramenta para spam, atividades ilegais ou que
+                            violem direitos de terceiros.</p>
+                    </div>
 
-        if(err){
-          erro.textContent = err; erro.classList.add('show');
-          statusBadge.hidden = true;
-          return null;
-        } else {
-          erro.classList.remove('show');
+                    <div>
+                        <h4 class="text-lg font-semibold text-gray-900 mb-1">Isenção de Responsabilidade</h4>
+                        <p>Não nos responsabilizamos pelo uso indevido dos links gerados através
+                            de nossa plataforma.</p>
+                    </div>
+
+                    <div>
+                        <h4 class="text-lg font-semibold text-gray-900 mb-1">Suporte</h4>
+                        <p>Precisa de ajuda? WhatsApp:
+                            <a href="https://wa.me/5538988064942" class="text-green-500 hover:text-green-600">(38)
+                                98806-4942</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="cookies" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 hidden z-50">
+        <div class="bg-white rounded-xl max-w-2xl w-full max-h-[80vh] overflow-y-auto">
+            <div class="p-5 sm:p-6">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-xl sm:text-2xl font-bold text-gray-900">Política de Cookies</h3>
+                    <button onclick="closeModal('cookies')" class="text-gray-500 hover:text-gray-700">
+                        <i class="fas fa-times text-xl"></i>
+                    </button>
+                </div>
+                <div class="space-y-4 text-sm sm:text-base text-gray-600">
+                    <p>Utilizamos cookies essenciais para garantir o funcionamento adequado
+                        da ferramenta.</p>
+
+                    <div>
+                        <h4 class="text-lg font-semibold text-gray-900 mb-1">Cookies Essenciais</h4>
+                        <p>Cookies técnicos necessários para o funcionamento básico do site.</p>
+                    </div>
+
+                    <div>
+                        <h4 class="text-lg font-semibold text-gray-900 mb-1">Analytics</h4>
+                        <p>Cookies anônimos para entender como os usuários interagem com nossa
+                            ferramenta.</p>
+                    </div>
+
+                    <div>
+                        <h4 class="text-lg font-semibold text-gray-900 mb-1">Controle de Cookies</h4>
+                        <p>Você pode controlar cookies através das configurações do seu navegador.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="faq" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 hidden z-50">
+        <div class="bg-white rounded-xl max-w-2xl w-full max-h-[80vh] overflow-y-auto">
+            <div class="p-5 sm:p-6">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-xl sm:text-2xl font-bold text-gray-900">Perguntas Frequentes</h3>
+                    <button onclick="closeModal('faq')" class="text-gray-500 hover:text-gray-700">
+                        <i class="fas fa-times text-xl"></i>
+                    </button>
+                </div>
+                <div class="space-y-6 text-sm sm:text-base text-gray-600">
+                    <div>
+                        <h4 class="text-lg font-semibold text-gray-900 mb-1">Como usar a ferramenta?</h4>
+                        <p>Basta inserir o DDI, número do WhatsApp e mensagem opcional. Clique em
+                            "Gerar link" e pronto!</p>
+                    </div>
+                    <div>
+                        <h4 class="text-lg font-semibold text-gray-900 mb-1">É gratuito?</h4>
+                        <p>Sim! Nossa ferramenta é 100% gratuita e sempre será.</p>
+                    </div>
+                    <div>
+                        <h4 class="text-lg font-semibold text-gray-900 mb-1">Preciso me cadastrar?</h4>
+                        <p>Não! Use quantas vezes quiser sem cadastro ou login.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="tutoriais" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 hidden z-50">
+        <div class="bg-white rounded-xl max-w-2xl w-full max-h-[80vh] overflow-y-auto">
+            <div class="p-5 sm:p-6">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-xl sm:text-2xl font-bold text-gray-900">Tutoriais</h3>
+                    <button onclick="closeModal('tutoriais')" class="text-gray-500 hover:text-gray-700">
+                        <i class="fas fa-times text-xl"></i>
+                    </button>
+                </div>
+                <div class="space-y-4 text-sm sm:text-base text-gray-600">
+                    <p>Aprenda a usar todas as funcionalidades do LinkWhatsApp como um
+                        profissional!</p>
+
+                    <div>
+                        <h4 class="text-lg font-semibold text-gray-900 mb-1">Passo a Passo Básico</h4>
+                        <ol class="list-decimal list-inside space-y-1">
+                            <li>Insira o código do país (DDI)</li>
+                            <li>Digite o número do WhatsApp (apenas números)</li>
+                            <li>Adicione uma mensagem pré-definida (opcional)</li>
+                            <li>Clique em "Gerar link"</li>
+                            <li>Use os botões para copiar, abrir ou compartilhar</li>
+                        </ol>
+                    </div>
+
+                    <div>
+                        <h4 class="text-lg font-semibold text-gray-900 mb-1">Dicas Profissionais</h4>
+                        <ul class="list-disc list-inside space-y-1">
+                            <li>Use mensagens personalizadas para diferentes contextos</li>
+                            <li>Compartilhe links em assinaturas de email</li>
+                            <li>Use em sites e redes sociais</li>
+                            <li>Ideal para atendimento ao cliente</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Script do menu responsivo -->
+    <script>
+        const navToggle = document.getElementById('navToggle');
+        const mobileMenu = document.getElementById('mobileMenu');
+
+        if (navToggle && mobileMenu) {
+            navToggle.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
         }
+    </script>
 
-        const full = rawDDI + rawLocal;
-        const base = 'https://wa.me/' + full;
-        const text = (mensagem.value || '').trim();
-        const url = text ? base + '?text=' + encodeURIComponent(text) : base;
-        return url;
-      }
-
-      function render(){
-        const url = makeWaLink();
-        if(!url) return;
-        link.value = url;
-        abrir.href = url;
-        statusBadge.hidden = false;
-      }
-
-      gerar.addEventListener('click', render);
-      [ddi, numero, mensagem].forEach(i => i.addEventListener('input', () => { if(link.value) render(); }));
-
-      limpar.addEventListener('click', () => {
-        numero.value = '';
-        mensagem.value = '';
-        link.value = '';
-        abrir.removeAttribute('href');
-        statusBadge.hidden = true;
-        erro.classList.remove('show');
-        numero.focus();
-      });
-
-      copiar.addEventListener('click', async () => {
-        const url = link.value || makeWaLink(); if(!url) return;
-        try{ 
-          await navigator.clipboard.writeText(url); 
-          copiar.innerHTML = `
-            <svg class="icon icon-check" viewBox="0 0 24 24" width="20" height="20">
-              <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
-            </svg>
-            Copiado!
-          `;
-          copiar.disabled = true; 
-          setTimeout(()=>{
-            copiar.innerHTML = `
-              <svg class="icon icon-copy" viewBox="0 0 24 24" width="20" height="20">
-                <path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/>
-              </svg>
-              Copiar
-            `;
-            copiar.disabled=false; 
-          }, 1200);
-        }catch(e){ 
-          copiar.textContent = 'Falhou :('; 
-          setTimeout(()=> copiar.textContent='Copiar', 1200); 
-        }
-      });
-
-      compartilhar.addEventListener('click', async () => {
-        const url = link.value || makeWaLink(); if(!url) return;
-        if(navigator.share){ 
-          try{ 
-            await navigator.share({ title:'Link do WhatsApp', url }); 
-          }catch(e){}
-        } else { 
-          copiar.click(); 
-        }
-      });
-
-      // Enter para gerar
-      ;[ddi, numero, mensagem].forEach(i => i.addEventListener('keydown', (ev)=>{
-        if(ev.key === 'Enter' && (ev.metaKey || ev.ctrlKey || i !== mensagem)){
-          ev.preventDefault(); render();
-        }
-      }));
-
-      // Pré-preencher via hash (opcional)
-      if(location.hash){
-        try{
-          const p = new URLSearchParams(location.hash.slice(1));
-          if(p.get('ddi')) ddi.value = p.get('ddi');
-          if(p.get('n')) numero.value = p.get('n');
-          if(p.get('t')) mensagem.value = p.get('t');
-        }catch(_){/* noop */}
-      }
-      
-      // Efeito visual de carregamento
-      document.addEventListener('DOMContentLoaded', function() {
-        const blob1 = document.querySelector('.b1');
-        const blob2 = document.querySelector('.b2');
-        const blob3 = document.querySelector('.b3');
-        
-        function animateBlobs() {
-          blob1.style.transform = `translate(${Math.sin(Date.now() / 5000) * 10}px, ${Math.cos(Date.now() / 4000) * 10}px)`;
-          blob2.style.transform = `translate(${Math.sin(Date.now() / 6000) * 15}px, ${Math.cos(Date.now() / 5000) * 15}px)`;
-          blob3.style.transform = `translate(${Math.sin(Date.now() / 7000) * 20}px, ${Math.cos(Date.now() / 6000) * 20}px)`;
-          requestAnimationFrame(animateBlobs);
-        }
-        
-        animateBlobs();
-      });
-    })();
-  </script>
+    <!-- Seu JS original -->
+    <script src="js/index.js"></script>
 </body>
+
 </html>
